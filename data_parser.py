@@ -8,7 +8,7 @@ class Dataset:
         Points = []
 
         for i in range(size):
-            point = {'x': randint(0,20), 'y': randint(0,20), 'color': 'black'}
+            point = [randint(0,20), randint(0,20), 'black']
             Points[i] = point
 
         return Points
