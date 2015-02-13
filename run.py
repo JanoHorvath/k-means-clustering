@@ -1,19 +1,17 @@
-import time
+import Tkinter
 from sort_into_clusters import SortIntoClusters
 
+
+window = Tkinter.Tk()
 sort = SortIntoClusters()
 
-sort.initialize()
-while True:
-    sort.assign_points()
-    sort.render()
-    time.sleep(1)
-    print('Assigned')
+canvas = Tkinter.Canvas(window, height=500, width=500)
+canvas.pack()
 
-    if sort.recalibrate():
-        break
-    sort.render()
-    time.sleep(2)
-    print('new cycle')
+scale = Tkinter.Scale(window, from_=0, to=10)
+scale.pack()
 
-print('Done')
+run_loop_button = Tkinter.Button(window, text="Run algorithm", command=lambda: sort.clusterize(canvas, scale.get()))
+run_loop_button.pack()
+
+window.mainloop()
