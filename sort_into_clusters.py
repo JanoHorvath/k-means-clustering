@@ -13,17 +13,25 @@ class SortIntoClusters():
 
     Points = []
 
-    def initialize(self, canvas, number_of_clusters):
+    def initialize_data(self, canvas):
+        """ Get info about canvas and initialize 20 points"""
         self.graph_height = canvas.winfo_height()
         self.graph_width = canvas.winfo_width()
-        self.cluster_center = []
 
         dataset = Dataset()
         self.Points = dataset.get_mock_dataset(20, self.graph_width, self.graph_height)
 
+        canvas.delete('all')
+        self.render(canvas)
+
+    def initialize_cluster_centers(self, canvas, number_of_clusters):
         """Initialize n cluster centers"""
+        self.cluster_center = []
+
         for n in range(number_of_clusters):
             self.cluster_center.append([randint(0, self.graph_height), randint(0, self.graph_width), self.colors[n]])
+
+        self.render(canvas)
         print("Initialized " + str(len(self.cluster_center)) + " cluster centers.")
 
     def assign_points(self):
@@ -62,7 +70,10 @@ class SortIntoClusters():
 
             """and computing the average of all dimensions."""
             for i in range(0, len(center) - 1):
-                center[i] = average[i]/len(points_of_same_color)
+                try:
+                    center[i] = average[i]/len(points_of_same_color)
+                except ZeroDivisionError:
+                    pass
 
 
         print('Repositioned Cluster Centers')
@@ -88,15 +99,15 @@ class SortIntoClusters():
 
     def clusterize(self, canvas, number_of_clusters):
         """ Repeats k-means clustering until the cluster centers do not change coordinates between cycles """
+        self.initialize_cluster_centers(canvas, number_of_clusters)
 
-        canvas.delete('all')
-        self.initialize(canvas, number_of_clusters)
         finished = False
         while not finished:
             self.assign_points()
             self.render(canvas)
             finished = self.recalibrate()
             self.render(canvas)
+            time.sleep(1)
             print('New cycle')
 
         print('Done')
