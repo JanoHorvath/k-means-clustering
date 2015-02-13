@@ -16,6 +16,7 @@ class SortIntoClusters():
         """ Get info about canvas and initialize 20 points"""
         self.graph_height = canvas.winfo_height()-30
         self.graph_width = canvas.winfo_width()-30
+        self.cluster_center = []
 
         dataset = Dataset()
         self.Points = dataset.get_mock_dataset(20, self.graph_width, self.graph_height)
