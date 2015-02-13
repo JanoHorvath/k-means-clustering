@@ -1,22 +1,21 @@
-import math, copy, time, Tkinter
+import math, copy, time
 from random import randint
 
 from data_parser import Dataset
 
 
 class SortIntoClusters():
-    cluster_center = []
-    graph_height = 500
-    graph_width = 500
-
-    colors = ['red', 'blue', 'green', 'pink', 'brown', 'grey', 'gold', 'purple']
-
-    Points = []
+    def __init__(self):
+        self.cluster_center = []
+        self.graph_height = 500
+        self.graph_width = 500
+        self.colors = ['red', 'dodger blue', 'green2', 'deep pink', 'brown', 'gray', 'gold', 'purple', 'cyan', 'green4']
+        self.Points = []
 
     def initialize_data(self, canvas):
         """ Get info about canvas and initialize 20 points"""
-        self.graph_height = canvas.winfo_height()
-        self.graph_width = canvas.winfo_width()
+        self.graph_height = canvas.winfo_height()-30
+        self.graph_width = canvas.winfo_width()-30
 
         dataset = Dataset()
         self.Points = dataset.get_mock_dataset(20, self.graph_width, self.graph_height)
@@ -79,23 +78,26 @@ class SortIntoClusters():
         print('Repositioned Cluster Centers')
         return old_centers == self.cluster_center
 
-
     def render(self, canvas):
-        print('Rendering.')
+        if len(self.Points[0]) <= 3:
+            print('Rendering 2D.')
 
-        canvas.delete('all')
+            canvas.delete('all')
 
-        for point in self.Points:
-            x = point[0]
-            y = point[1]
-            canvas.create_oval(x, y, x+5, y+5, fill=point[-1], width=0)
+            for point in self.Points:
+                x = point[0]
+                y = point[1]
+                canvas.create_oval(x, y, x+5, y+5, fill=point[-1], width=0)
 
-        for center in self.cluster_center:
-            x = center[0]
-            y = center[1]
-            canvas.create_rectangle(x-4, y-4, x+4, y+4, fill=center[-1], width=0)
-        canvas.pack()
-        canvas.update_idletasks()
+            for center in self.cluster_center:
+                x = center[0]
+                y = center[1]
+                canvas.create_rectangle(x-4, y-4, x+4, y+4, fill=center[-1], width=0)
+            canvas.pack()
+            canvas.update_idletasks()
+        else:
+            canvas.create_text(self.graph_width/2, self.graph_height/2, text="Data has more than 2 dimensions. Unable to render. yet.")
+
 
     def clusterize(self, canvas, number_of_clusters):
         """ Repeats k-means clustering until the cluster centers do not change coordinates between cycles """
