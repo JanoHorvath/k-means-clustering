@@ -14,8 +14,8 @@ class SortIntoClusters():
 
     def initialize_data(self, canvas):
         """ Get info about canvas and initialize 20 points"""
-        self.graph_height = canvas.winfo_height()-30
-        self.graph_width = canvas.winfo_width()-30
+        self.graph_height = canvas.winfo_reqwidth()-30
+        self.graph_width = canvas.winfo_reqheight()-30
         self.cluster_center = []
 
         dataset = Dataset()
@@ -94,7 +94,6 @@ class SortIntoClusters():
                 x = center[0]
                 y = center[1]
                 canvas.create_rectangle(x-4, y-4, x+4, y+4, fill=center[-1], width=0)
-            canvas.pack()
             canvas.update_idletasks()
         else:
             canvas.create_text(self.graph_width/2, self.graph_height/2, text="Data has more than 2 dimensions. Unable to render. yet.")
@@ -106,11 +105,13 @@ class SortIntoClusters():
 
         finished = False
         while not finished:
+            time.sleep(0.3)
             self.assign_points()
             self.render(canvas)
+            time.sleep(0.3)
             finished = self.recalibrate()
             self.render(canvas)
-            time.sleep(1)
+            time.sleep(0.3)
             print('New cycle')
 
         print('Done')
