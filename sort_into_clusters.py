@@ -22,7 +22,7 @@ class SortIntoClusters():
         number_of_points = 50
         dataset = Dataset()
         self.Points = dataset.get_mock_dataset(number_of_points, self.graph_width, self.graph_height)
-        print("Initialized " + str(len(self.Points)) + " points.")
+        #print("Initialized " + str(len(self.Points)) + " points.")
 
         canvas.delete('all')
         self.render(canvas)
@@ -35,11 +35,11 @@ class SortIntoClusters():
             self.cluster_center.append([randint(0, self.graph_height), randint(0, self.graph_width), self.colors[n]])
 
         self.render(canvas)
-        print("Initialized " + str(len(self.cluster_center)) + " cluster centers.")
+        #print("Initialized " + str(len(self.cluster_center)) + " cluster centers.")
 
     def assign_points(self):
         """Assigns color to every point"""
-        print('Assigning color to points.')
+        #print('Assigning color to points.')
 
         for point in self.Points:
             distance = None
@@ -79,7 +79,7 @@ class SortIntoClusters():
                     pass
 
 
-        print('Repositioned Cluster Centers')
+        #print('Repositioned Cluster Centers')
         return old_centers == self.cluster_center
 
     def analyze(self, all_cluster_centers):
@@ -133,7 +133,7 @@ class SortIntoClusters():
 
     def render(self, canvas):
         if len(self.Points[0]) <= 3:
-            print('Rendering 2D.')
+            #print('Rendering 2D.')
 
             canvas.delete('all')
 
@@ -164,9 +164,9 @@ class SortIntoClusters():
             finished = self.recalibrate()
             self.render(canvas)
             #time.sleep(0.3)
-            print('New cycle')
+            #print('New cycle')
 
-        print('Done')
+       # print('Done')
 
     def detectClusters(self, canvas, number_of_repetitions):
         """ Repeats the algorithm n times with 5-10 cluster centers """
