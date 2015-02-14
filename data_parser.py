@@ -26,8 +26,8 @@ class Dataset:
 
         """ Creates numberOf points each randomly assigned to one cluster area and random x/y values near that area """
         for i in range(numberOf):
-            for i in range(randint(0, len(clusters))):
-                point = [randint(0,30)+clusters[i][0], randint(0,30)+clusters[i][1], 'black']
-                points.append(point)
+            j = randint(0, len(clusters)-1)
+            point = [randint(0,30)+clusters[j][0], randint(0,30)+clusters[j][1], 'black']
+            points.append(point)
 
         return points

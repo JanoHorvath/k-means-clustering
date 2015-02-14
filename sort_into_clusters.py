@@ -18,8 +18,10 @@ class SortIntoClusters():
         self.graph_width = canvas.winfo_reqheight()-30
         self.cluster_center = []
 
+        number_of_points = 50
         dataset = Dataset()
-        self.Points = dataset.get_mock_dataset(20, self.graph_width, self.graph_height)
+        self.Points = dataset.get_mock_dataset(number_of_points, self.graph_width, self.graph_height)
+        print("Initialized " + str(len(self.Points)) + " points.")
 
         canvas.delete('all')
         self.render(canvas)
