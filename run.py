@@ -22,8 +22,15 @@ initialize_random_button = Tkinter.Button(window,
 scale = Tkinter.Scale(window, orient='horizontal', from_=0, to=10)
 scale.grid(row=2, column=1, sticky='n')
 
-run_loop_button = Tkinter.Button(window,
-                                 text="Run algorithm",
-                                 command=lambda: sort.clusterize(canvas, scale.get())).grid(row=3, column=1, sticky='n')
+run_step_button = Tkinter.Button(window,
+                                 text="One step",
+                                 command=lambda: sort.clusterizeStep(canvas, scale.get())).grid(row=3, column=1, sticky='n')
+
+number_of_repetitions = Tkinter.Entry(window, width=3)
+number_of_repetitions.grid(row=4, column=1)
+
+run_algorithm_button = Tkinter.Button(window,
+                                      text="Run algorithm",
+                                      command=lambda: sort.detectClusters(canvas, number_of_repetitions.get())).grid(row=5,column=1)
 
 window.mainloop()

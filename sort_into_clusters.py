@@ -99,19 +99,69 @@ class SortIntoClusters():
             canvas.create_text(self.graph_width/2, self.graph_height/2, text="Data has more than 2 dimensions. Unable to render. yet.")
 
 
-    def clusterize(self, canvas, number_of_clusters):
+    def clusterizeStep(self, canvas, number_of_clusters):
         """ Repeats k-means clustering until the cluster centers do not change coordinates between cycles """
         self.initialize_cluster_centers(canvas, number_of_clusters)
 
         finished = False
         while not finished:
-            time.sleep(0.3)
+            #time.sleep(0.3)
             self.assign_points()
             self.render(canvas)
-            time.sleep(0.3)
+            #time.sleep(0.3)
             finished = self.recalibrate()
             self.render(canvas)
-            time.sleep(0.3)
+            #time.sleep(0.3)
             print('New cycle')
 
         print('Done')
+
+    def detectClusters(self, canvas, number_of_repetitions):
+        """ Repeats the algorithm n times with 2-10 cluster centers """
+        all_cluster_centers = []
+        deviation = 5
+
+        for i in range(2, 10):
+            print('Starting with' + str(i) + ' centers')
+            for _ in range(0, int(number_of_repetitions)):
+                self.clusterizeStep(canvas, i)
+                for center in self.cluster_center:
+                    all_cluster_centers.append(center)
+
+        """ Now analyse the coordinates of clusters adding those inside deviation together, stripping away last parameter (color)"""
+        final_cluster_centers = [all_cluster_centers[0][:-1]]
+        final_cluster_centers[0].append(1)
+
+        for cluster in all_cluster_centers:
+            cluster[-1] = 1 #this will be the count of how many clusters are approximated to a center
+            duplicate = True
+            for final_cluster in final_cluster_centers:
+                for i in range(0, len(cluster)-2):
+                    if (cluster[i] > (final_cluster[i] + deviation)) or (cluster[i] < (final_cluster[i] - deviation)):
+                        duplicate = False
+                        break
+                    else:
+                        duplicate = True
+                if duplicate:
+                    final_cluster[-1] += 1
+                    break
+
+            if not duplicate:
+                final_cluster_centers.append(cluster)
+
+        print('Merged results into ' + str(len(final_cluster_centers)) + ' new final centers.')
+
+        """ Filter out the most popular final_cluster_centers and reassign colors """
+        popular_treshold = 5
+        final_cluster_centers = filter(lambda p: p[-1] > popular_treshold, final_cluster_centers)
+
+        for n in range(0, len(final_cluster_centers)):
+            final_cluster_centers[n].append(self.colors[n%10])
+            print(final_cluster_centers[n][-2:])
+
+        self.cluster_center = final_cluster_centers
+        self.assign_points()
+        #self.cluster_center = [] #hack to only color point in the final step
+        self.render(canvas)
+
+        print('Done.')
